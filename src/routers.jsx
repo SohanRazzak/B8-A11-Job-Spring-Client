@@ -6,6 +6,10 @@ import SignUp from "./pages/SignUp/SignUp";
 import SignIn from "./pages/SignIn/SignIn";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import Profile from "./pages/Profile/Profile";
+import AllJobs from "./pages/AllJobs/AllJobs";
+import AddJob from "./pages/AddJob/AddJob";
+import MyJobs from "./pages/MyJobs/MyJobs";
+import AppliedJobs from "./pages/AppliedJobs/AppliedJobs";
 
 const routers = createBrowserRouter([
     {
@@ -28,6 +32,32 @@ const routers = createBrowserRouter([
             {
                 path: "/profile",
                 element: <PrivateRoute><Profile/></PrivateRoute>
+            },
+            {
+                path: "/all_jobs",
+                element: <AllJobs/>
+            },
+            {
+                path: "/add_job",
+                element: <PrivateRoute><AddJob/></PrivateRoute>
+            },
+            {
+                path: "/my_jobs",
+                element: <PrivateRoute><MyJobs/></PrivateRoute>
+            },
+            {
+                path: "/applied_jobs",
+                element: <PrivateRoute><AppliedJobs/></PrivateRoute>
+            },
+            {
+                path: "/blogs",
+                element: <PrivateRoute><MyJobs/></PrivateRoute>
+            },
+            {
+                path: "/terms_condition"
+            },
+            {
+                path: "/privacy_policy"
             }
         ]
     }

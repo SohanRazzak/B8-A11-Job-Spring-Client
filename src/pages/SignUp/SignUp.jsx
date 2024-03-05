@@ -13,14 +13,19 @@ import SignUpAnimation from "../../animations/SignUpAnimation/SignUpAnimation";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
     const [showPass, setShowPass] = useState(false);
     const [showError, setShowError] = useState(false);
-    const { createUser, googleLogin } = useContext(AuthContext);
+    const { createUser, googleLogin, isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
+
+    // Checking if User already logged In and redirecting (alt for login redirection)
+    if(isLoggedIn){
+        return <Navigate to={location.state ? navigate(location.state) : navigate("/")}/>
+        }
 
     // Handle Sign Up
     const handleSignUp = (e) => {
@@ -64,7 +69,8 @@ const SignUp = () => {
                 });
 
                 form.reset();
-                location.state ? navigate(location.state) : navigate("/");
+                // location.state ? navigate(location.state) : navigate("/");
+                setIsLoggedIn(true)
             }
         });
     };
@@ -91,6 +97,7 @@ const SignUp = () => {
                     }
                 });
                 // location.state ? navigate(location.state) : navigate("/");
+                setIsLoggedIn(true)
             }
         });
     }
