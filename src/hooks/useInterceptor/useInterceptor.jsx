@@ -1,7 +1,5 @@
 import axios from "axios";
-import { useContext, useEffect } from "react";
-import { Navigate } from "react-router-dom";
-import { AuthContext } from "../../AuthProvider/AuthProvider";
+import { useEffect } from "react";
 
 
 // Creating axois instance
@@ -11,19 +9,17 @@ const axiosSecure = axios.create({
 })
 
 const useInterceptor = () => {
-    const { logOutUser } = useContext(AuthContext)
+
     useEffect(()=>{
-        axiosSecure.response.use((res)=>{
+        axiosSecure.interceptors.response.use((res)=>{
             return res;
         },
         (error)=>{
-            if(error.response.status == "401" || error.response.status == "403"){
-                logOutUser()
-                .then(()=> Navigate('/login'))
-                .catch((error)=> console.log(error))
+            if(error.response.status == 401 || error.response.status == 403){
+                console.log("Logout Hobe");
             }
         })
-    })
+    },[])
     return axiosSecure;
 };
 

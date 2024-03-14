@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
+import ContainerLayout from "../../layouts/ContainerLayout/ContainerLayout";
 
 const Footer = () => {
     return (
         <footer className="bg-white">
+            <ContainerLayout>
             <div className="w-full p-4 py-6 lg:py-8">
                 <div className="md:flex md:justify-around">
                     <div className="mb-6 md:mb-0 l flex-grow">
@@ -81,6 +83,7 @@ const Footer = () => {
                 </div>
                 
             </div>
+            </ContainerLayout>
             <hr className="my-2" />
                 {/* Copyright Text  */}
                 <div className="sm:flex sm:items-center sm:justify-center bg-gray-200 py-3 w-full">

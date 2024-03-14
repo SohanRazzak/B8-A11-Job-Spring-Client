@@ -1,11 +1,11 @@
-import { Navbar, Button } from "keep-react";
+import { Navbar, Button, Avatar } from "keep-react";
 import { Link, NavLink } from "react-router-dom";
 import "./TopNavBar.css";
-import { useContext } from "react";
-import { AuthContext } from "../../AuthProvider/AuthProvider";
+import useAuth from "../../hooks/useAuth/useAuth";
+import ContainerLayout from "../../layouts/ContainerLayout/ContainerLayout";
 
 export const TopNavbar = () => {
-    const { isLoggedIn, logOutUser, setIsLoggedIn } = useContext(AuthContext);
+    const { isLoggedIn, logOutUser, user } = useAuth();
 
     // NavLinks
     const navLinks = (
@@ -24,13 +24,13 @@ export const TopNavbar = () => {
     );
 
     // Handling Logut
-    const handleLogOut = ()=>{
+    const handleLogOut = () => {
         logOutUser();
-        setIsLoggedIn(false)
-    }
+    };
 
     return (
-        <Navbar fluid={true} className="shadow-sm">
+        <Navbar fluid={true} className="shadow-sm px-0">
+            <ContainerLayout>
             <Navbar.Container className="flex items-center justify-between">
                 <Navbar.Container className="flex items-center">
                     <Navbar.Brand>
@@ -62,9 +62,22 @@ export const TopNavbar = () => {
 
                 <Navbar.Container className="flex gap-2">
                     {isLoggedIn ? (
-                        <Button onClick={handleLogOut} size="sm" type="primary" color="success">
-                            Logout
-                        </Button>
+                        <div className="flex items-center gap-3">
+                            <Avatar
+                                shape="circle"
+                                size="md"
+                                img={user?.photoURL}
+                                className="border border-gray-400"
+                            />
+                            <Button
+                                onClick={handleLogOut}
+                                size="sm"
+                                type="primary"
+                                color="success"
+                            >
+                                Logout
+                            </Button>
+                        </div>
                     ) : (
                         <Link to="/sign_in">
                             <Button size="sm" type="primary" color="success">
@@ -75,6 +88,7 @@ export const TopNavbar = () => {
                     <Navbar.Toggle />
                 </Navbar.Container>
             </Navbar.Container>
+            </ContainerLayout>
         </Navbar>
     );
 };
