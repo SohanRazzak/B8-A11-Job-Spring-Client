@@ -1,4 +1,4 @@
-import { Navbar, Button, Avatar } from "keep-react";
+import { Navbar, Button, Avatar, Tooltip } from "keep-react";
 import { Link, NavLink } from "react-router-dom";
 import "./TopNavBar.css";
 import useAuth from "../../hooks/useAuth/useAuth";
@@ -31,63 +31,75 @@ export const TopNavbar = () => {
     return (
         <Navbar fluid={true} className="shadow-sm px-0">
             <ContainerLayout>
-            <Navbar.Container className="flex items-center justify-between">
-                <Navbar.Container className="flex items-center">
-                    <Navbar.Brand>
-                        <img
-                            src="https://i.ibb.co/pzDmzxs/job-spring.png"
-                            alt="keep"
-                            width="140"
-                            height="60"
-                        />
-                    </Navbar.Brand>
-                    <Navbar.Divider></Navbar.Divider>
-                    {/* NavLinks  */}
-                    <Navbar.Container
-                        tag="ul"
-                        className="lg:flex hidden items-center justify-between gap-6 py-5 text-gray-700"
-                    >
-                        {navLinks}
-                    </Navbar.Container>
-                    <Navbar.Collapse collapseType="sidebar">
+                <Navbar.Container className="flex items-center justify-between">
+                    <Navbar.Container className="flex items-center">
+                        <Navbar.Brand>
+                            <img
+                                src="https://i.ibb.co/pzDmzxs/job-spring.png"
+                                alt="keep"
+                                width="140"
+                                height="60"
+                            />
+                        </Navbar.Brand>
+                        <Navbar.Divider></Navbar.Divider>
                         {/* NavLinks  */}
                         <Navbar.Container
                             tag="ul"
-                            className="flex flex-col gap-4 text-gray-700"
+                            className="lg:flex hidden items-center justify-between gap-6 py-5 text-gray-700"
                         >
                             {navLinks}
                         </Navbar.Container>
-                    </Navbar.Collapse>
-                </Navbar.Container>
-
-                <Navbar.Container className="flex gap-2">
-                    {isLoggedIn ? (
-                        <div className="flex items-center gap-3">
-                            <Avatar
-                                shape="circle"
-                                size="md"
-                                img={user?.photoURL}
-                                className="border border-gray-400"
-                            />
-                            <Button
-                                onClick={handleLogOut}
-                                size="sm"
-                                type="primary"
-                                color="success"
+                        <Navbar.Collapse collapseType="sidebar">
+                            {/* NavLinks  */}
+                            <Navbar.Container
+                                tag="ul"
+                                className="flex flex-col gap-4 text-gray-700"
                             >
-                                Logout
-                            </Button>
-                        </div>
-                    ) : (
-                        <Link to="/sign_in">
-                            <Button size="sm" type="primary" color="success">
-                                Login
-                            </Button>
-                        </Link>
-                    )}
-                    <Navbar.Toggle />
+                                {navLinks}
+                            </Navbar.Container>
+                        </Navbar.Collapse>
+                    </Navbar.Container>
+
+                    <Navbar.Container className="flex gap-2">
+                        {isLoggedIn ? (
+                            <div className="flex items-center gap-3">
+                                <Tooltip
+                                    content={user?.displayName}
+                                    trigger="hover"
+                                    placement="bottom"
+                                    animation="duration-300"
+                                    style="light"
+                                >
+                                    <Avatar
+                                        shape="circle"
+                                        size="md"
+                                        img={user?.photoURL}
+                                        className="border border-gray-400"
+                                    />
+                                </Tooltip>
+                                <Button
+                                    onClick={handleLogOut}
+                                    size="sm"
+                                    type="primary"
+                                    color="success"
+                                >
+                                    Logout
+                                </Button>
+                            </div>
+                        ) : (
+                            <Link to="/sign_in">
+                                <Button
+                                    size="sm"
+                                    type="primary"
+                                    color="success"
+                                >
+                                    Login
+                                </Button>
+                            </Link>
+                        )}
+                        <Navbar.Toggle />
+                    </Navbar.Container>
                 </Navbar.Container>
-            </Navbar.Container>
             </ContainerLayout>
         </Navbar>
     );

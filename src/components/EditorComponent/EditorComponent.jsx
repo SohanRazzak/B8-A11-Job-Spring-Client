@@ -2,11 +2,14 @@
 import SimpleMDEEditor from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { PropTypes } from "prop-types";
+import { useState } from "react";
 
 const EditorComponent = ({className, controllState}) => {
     const [editorText, setEditorText] = controllState;
+    const [isFocused, setIsFocused] = useState(false)
 
     const handleChange = (newValue) => {
+        setIsFocused(true)
         setEditorText(newValue);
     };
 
@@ -16,7 +19,7 @@ const EditorComponent = ({className, controllState}) => {
                 value={editorText}
                 onChange={handleChange}
                 options={{
-                    autofocus: true,
+                    autofocus: isFocused,
                     spellChecker: false,
                     placeholder: "Enter your job description (markdown supported)...",
                 }}
