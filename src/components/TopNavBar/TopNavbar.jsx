@@ -74,7 +74,7 @@ export const TopNavbar = () => {
                                         shape="circle"
                                         size="md"
                                         img={user?.photoURL}
-                                        className="border border-gray-400"
+                                        className="border border-gray-400 cursor-pointer"
                                     />
                                 </Tooltip>
                                 <Button

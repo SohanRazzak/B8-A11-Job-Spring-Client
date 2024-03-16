@@ -1,10 +1,16 @@
-import { Card, Label, TextInput } from "keep-react";
+import { Card, DatePicker, Label, TextInput } from "keep-react";
 import PageTitle from "../../components/PageTitle/PageTitle";
 import EditorComponent from "../../components/EditorComponent/EditorComponent";
 import { useState } from "react";
+import useAuth from "../../hooks/useAuth/useAuth";
+import useAxiosInstance from "../../hooks/useAxiosInstance/useAxiosInstance";
+import Swal from "sweetalert2";
 
 const AddJob = () => {
     const [editorText, setEditorText] = useState("");
+    const [deadlineDate, setDeadlineDate] = useState(null);
+    const { user } = useAuth();
+    const axiosInstance = useAxiosInstance();
 
     // Adding a new Job
     const handleAddJob = (e) => {
@@ -17,20 +23,41 @@ const AddJob = () => {
             companyThumb: form.companyThumb.value,
             jobDescription: editorText,
             jobType: form.jobType.value,
-            salaryRange: [parseInt(form.salaryMin.value), parseInt(form.salaryMax.value)],
-
+            jobIndustry: form.jobIndustry.value,
+            salary: {
+                min: parseInt(form.salaryMin.value),
+                max: parseInt(form.salaryMax.value),
+                frequency: form.salaryFreq.value,
+            },
+            publisher: user?.email,
+            publishedAt: new Date(),
+            deadline: deadlineDate,
+            totalApplicant: 0,
+        };
+        // Adding New Job to DB
+        try {
+            axiosInstance.post("/add-job", newJob)
+            .then(res => {
+                if(res.data.insertedId){
+                    Swal.fire('Success!', 'This Job Is Added To Job List Successfully!', 'success')
+                }
+            })
+        } catch (error) {
+            console.log(error);
         }
-        console.log(newJob);
     };
     return (
         <>
-            <PageTitle title="Add a new Job" background="import background" />
+            <PageTitle title="Add a new Job!" background="import background" />
             <div className="max-w-6xl mx-auto my-5 py-8 rounded-md bg-gray-50">
                 <span className="text-lg font-medium text-gray-800 mt-4 flex justify-center my-5 mx-2">
                     Please fill out the form below to list a new job
                 </span>
                 <Card className="rounded-md p-3 mx-3">
-                    <form onSubmit={handleAddJob} className="grid mt-2 lg:grid-cols-2 gap-4">
+                    <form
+                        onSubmit={handleAddJob}
+                        className="grid mt-2 lg:grid-cols-2 gap-4"
+                    >
                         {/* Job Title  */}
                         <div className="mb-2">
                             <Label htmlFor="jobTitle" value="Job Title" />
@@ -54,7 +81,10 @@ const AddJob = () => {
 
                         {/* Company Logo  */}
                         <div className="mb-2">
-                            <Label htmlFor="companyLogo" value="Company Logo URL" />
+                            <Label
+                                htmlFor="companyLogo"
+                                value="Company Logo URL"
+                            />
                             <TextInput
                                 id="companyLogo"
                                 name="companyLogo"
@@ -64,7 +94,10 @@ const AddJob = () => {
                         </div>
                         {/* Company Thumnail  */}
                         <div className="mb-2">
-                            <Label htmlFor="companyThumb" value="Company Thumbnail URL" />
+                            <Label
+                                htmlFor="companyThumb"
+                                value="Company Thumbnail URL"
+                            />
                             <TextInput
                                 id="companyThumb"
                                 name="companyThumb"
@@ -72,15 +105,38 @@ const AddJob = () => {
                                 required
                             />
                         </div>
-                        
+
                         {/* Job Description  */}
-                        <span className="-mb-[14px] font-semibold text-gray-700 text-sm">Job Description</span>
-                        <EditorComponent className="lg:col-span-2 " controllState={[editorText, setEditorText]}/>
+                        <div className="mb-2 lg:col-span-2">
+                            <span className="-mb-[14px] font-semibold text-gray-700 text-sm">
+                                Job Description
+                            </span>
+                            <EditorComponent
+                                className="lg:col-span-2"
+                                controllState={[editorText, setEditorText]}
+                            />
+                        </div>
+
+                        {/* Job Industry  */}
+                        <div className="mb-2">
+                            <Label htmlFor="jobIndustry" value="Job Industry" />
+                            <TextInput
+                                id="jobIndustry"
+                                name="jobIndustry"
+                                placeholder="Enter a job Industry i.e: Technogloy"
+                                required
+                            />
+                        </div>
 
                         {/* Job Type  */}
                         <div className="mb-2">
-                        <span className="-mb-[14px] font-semibold text-gray-700 text-sm">Job Category</span>
-                            <select name="jobType" className="p-[10px] border border-gray-400 border-opacity-70 rounded-md w-full">
+                            <span className="-mb-[14px] font-semibold text-gray-700 text-sm">
+                                Job Category
+                            </span>
+                            <select
+                                name="jobType"
+                                className="p-[10px] border border-gray-400 border-opacity-70 rounded-md w-full"
+                            >
                                 <option value="onSite">On Site</option>
                                 <option value="remote">Remote</option>
                                 <option value="hybrid">Hybrid</option>
@@ -88,32 +144,64 @@ const AddJob = () => {
                             </select>
                         </div>
                         {/* Salary Range  */}
-                        <div className="mb-2 flex items-center justify-center gap-3">
+                        <div className="mb-2 flex items-end justify-center gap-3">
                             <div className="flex-grow">
-                            <Label htmlFor="salaryMin" value="Minimum Salary (USD)" />
-                            <TextInput
-                                id="salaryMin"
-                                name="salaryMin"
-                                type="number"
-                                placeholder="Enter Minimum Salary"
-                                required
-                            />
+                                <Label
+                                    htmlFor="salaryMin"
+                                    value="Minimum Salary (USD)"
+                                />
+                                <TextInput
+                                    id="salaryMin"
+                                    name="salaryMin"
+                                    type="number"
+                                    placeholder="Enter Minimum Salary"
+                                    required
+                                />
                             </div>
-                            <span className="mt-5 font-semibold text-gray-700 text-sm">to</span>
                             <div className="flex-grow">
-                            <Label htmlFor="salaryMax" value="Maximum Salary (USD)" />
-                            <TextInput
-                                id="salaryMax"
-                                name="salaryMax"
-                                type="number"
-                                placeholder="Enter Maximum Salary"
-                                required
-                            />
+                                <Label
+                                    htmlFor="salaryMax"
+                                    value="Maximum Salary (USD)"
+                                />
+                                <TextInput
+                                    id="salaryMax"
+                                    name="salaryMax"
+                                    type="number"
+                                    placeholder="Enter Maximum Salary"
+                                    required
+                                />
                             </div>
+                            <div className="flex-grow">
+                            <span className="-mb-[14px] font-semibold text-gray-700 text-sm">
+                                Frequency
+                            </span>
+                            <select
+                                name="salaryFreq"
+                                className="p-[10px] border border-gray-400 border-opacity-70 rounded-md w-full"
+                            >
+                                <option value="per hour">Hourly</option>
+                                <option value="per Month">Monthly</option>
+                                <option value="per quarter">Quarterly</option>
+                                <option value="per twice a year">Twice a Year</option>
+                                <option value="per annual">Annually</option>
+                            </select>
+                            </div>
+                        </div>
+                        {/* Deadline  */}
+                        <div className="mb-2">
+                            <span className="-mb-[14px] font-semibold text-gray-700 text-sm">
+                                Deadline
+                            </span>
+                            <DatePicker
+                                singleDate={setDeadlineDate}
+                                placeholder="Date / Month / Year"
+                            >
+                                <DatePicker.SingleDate />
+                            </DatePicker>
                         </div>
 
                         {/* Submit Button */}
-                        <div className="mt-2 flex justify-center lg:col-span-2">
+                        <div className="my-2 flex justify-center lg:col-span-2">
                             <input
                                 type="submit"
                                 value="Add to Job List"

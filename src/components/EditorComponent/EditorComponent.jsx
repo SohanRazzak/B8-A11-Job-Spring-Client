@@ -21,7 +21,7 @@ const EditorComponent = ({className, controllState}) => {
                 options={{
                     autofocus: isFocused,
                     spellChecker: false,
-                    placeholder: "Enter your job description (markdown supported)...",
+                    placeholder: "Enter your job description, i.e: Job Description, Application Instructions, Qualifications, Required Skills, Benefits/Perks (markdown supported)...",
                 }}
             />
         </div>
