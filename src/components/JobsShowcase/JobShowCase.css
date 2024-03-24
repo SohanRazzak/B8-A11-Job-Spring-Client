@@ -1,0 +1,13 @@
+.react-tabs__tab--selected{
+    padding: 8px 14px;
+    border: 1px  solid lawngreen;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.react-tabs__tab{
+    padding: 8px 14px;
+    border: 1px  solid gray;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}

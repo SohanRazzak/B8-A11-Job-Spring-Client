@@ -1,7 +1,6 @@
 import Lottie from "lottie-react";
 import errorAnimation from "./Animation - 1709472229064.json";
 import { Button } from "keep-react";
-import { Link } from "react-router-dom";
 
 const ErrorAnimation = () => {
     return (
@@ -13,7 +12,7 @@ const ErrorAnimation = () => {
             />
             </div>
             <div className="flex justify-center my-5 z-20">
-                <Button className="bg-rose-500 text-white uppercase" type="error"><Link to='/'>Home</Link></Button>
+                <Button className="bg-rose-500 text-white uppercase" type="error"><a href='/'>Home</a></Button>
             </div>
         </div>
     );

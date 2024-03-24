@@ -3,7 +3,8 @@ import ContainerLayout from "../../layouts/ContainerLayout/ContainerLayout";
 
 const Footer = () => {
     return (
-        <footer className="bg-white">
+        <footer className="bg-white mt-4">
+            <hr/>
             <ContainerLayout>
             <div className="w-full p-4 py-6 lg:py-8">
                 <div className="md:flex md:justify-around">

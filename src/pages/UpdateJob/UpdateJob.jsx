@@ -1,64 +1,95 @@
-import { Card, DatePicker, Label, TextInput } from "keep-react";
+import { useParams } from "react-router-dom";
+import useJobFinder from "../../hooks/useJobFinder/useJobFinder";
+import {
+    Card,
+    DatePicker,
+    Label,
+    Spinner,
+    TextInput,
+    Textarea,
+} from "keep-react";
 import PageTitle from "../../components/PageTitle/PageTitle";
-import EditorComponent from "../../components/EditorComponent/EditorComponent";
-import { useState } from "react";
 import useAuth from "../../hooks/useAuth/useAuth";
+import { useState } from "react";
 import useAxiosInstance from "../../hooks/useAxiosInstance/useAxiosInstance";
 import Swal from "sweetalert2";
 
-const AddJob = () => {
-    const [editorText, setEditorText] = useState(null);
+const UpdateJob = () => {
+    const { _id } = useParams();
+    const job = useJobFinder(["job,", _id], `/job-details/${_id}`);
     const [deadlineDate, setDeadlineDate] = useState(null);
+    const [jobType, setJobType] = useState(null);
+    const [salaryFreq, setSalaryFreq] = useState(null);
+    const [jobDetails, setJobDetails] = useState("");
     const { user } = useAuth();
-    const axiosInstance = useAxiosInstance();
+    const axiosInstance = useAxiosInstance()
 
-    // Adding a new Job
-    const handleAddJob = (e) => {
+    if (job.isLoading || job.data === undefined) {
+        return (
+            <div className="h-[360px] border-red-100 border rounded-md grid place-items-center">
+                <Spinner color="info" size="xl" />
+            </div>
+        );
+    }
+
+    const {
+        jobTitle,
+        totalApplicant,
+        company,
+        companyLogo,
+        companyThumb,
+        jobIndustry,
+        salary,
+        jobDescription,
+    } = job.data || {};
+
+    // Updating the job
+    const handleUpdateJob = (e) => {
         e.preventDefault();
-        const form = e.target;
-        if(deadlineDate === null || editorText == null){
+        if(deadlineDate === null){
             return Swal.fire("Error", "Please Set a Deadline!", "error")
         }
-        const newJob = {
+        const form = e.target;
+        const updatedJob = {
             jobTitle: form.jobTitle.value,
             company: form.company.value,
             companyLogo: form.companyLogo.value,
             companyThumb: form.companyThumb.value,
-            jobDescription: editorText,
-            jobType: form.jobType.value,
+            jobDescription: jobDetails || jobDescription,
+            jobType: jobType || job?.data?.jobType,
             jobIndustry: form.jobIndustry.value,
             salary: {
                 min: parseInt(form.salaryMin.value),
                 max: parseInt(form.salaryMax.value),
-                frequency: form.salaryFreq.value,
+                frequency: salaryFreq || salary?.frequency,
             },
             publisher: user?.email,
             publishedAt: new Date(),
             deadline: deadlineDate,
-            totalApplicant: 0,
+            totalApplicant: totalApplicant,
         };
-        // Adding New Job to DB
-        try {
-            axiosInstance.post("/add-job", newJob)
-            .then(res => {
-                if(res.data.insertedId){
-                    Swal.fire('Success!', 'This Job Is Added To Job List Successfully!', 'success')
-                }
-            })
-        } catch (error) {
-            console.log(error);
-        }
+        
+        console.log(updatedJob);
+        
+        // Updating to server
+        axiosInstance.patch(`/update-my-job/${_id}`, updatedJob)
+        .then(res => {
+            if(res.data.modifiedCount){
+                Swal.fire('Success!', 'This Job Is Updated Successfully!', 'success')
+            }
+        })
+        .catch(err => console.log(err))
     };
     return (
         <>
-            <PageTitle title="Add a new Job!"/>
+            <PageTitle title="Update Job!" />
             <div className="max-w-6xl mx-auto my-5 py-8 rounded-md bg-gray-100">
                 <span className="text-lg font-medium text-gray-800 mt-4 flex justify-center my-5 mx-2">
-                    Please fill out the form below to list a new job
+                    Please fill out the form below
                 </span>
                 <Card className="rounded-md p-3 mx-3">
                     <form
-                        onSubmit={handleAddJob}
+                        onSubmit={handleUpdateJob}
                         className="grid mt-2 lg:grid-cols-2 gap-4"
                     >
                         {/* Job Title  */}
@@ -67,6 +98,7 @@ const AddJob = () => {
                             <TextInput
                                 id="jobTitle"
                                 name="jobTitle"
+                                value={jobTitle}
                                 placeholder="i.e: Senior UI/UX Designer"
                                 required
                             />
@@ -77,6 +109,7 @@ const AddJob = () => {
                             <TextInput
                                 id="company"
                                 name="company"
+                                value={company}
                                 placeholder="i.e: Google"
                                 required
                             />
@@ -91,6 +124,7 @@ const AddJob = () => {
                             <TextInput
                                 id="companyLogo"
                                 name="companyLogo"
+                                value={companyLogo}
                                 placeholder="Enter a valid logo URL"
                                 required
                             />
@@ -104,6 +138,7 @@ const AddJob = () => {
                             <TextInput
                                 id="companyThumb"
                                 name="companyThumb"
+                                value={companyThumb}
                                 placeholder="Enter a valid logo URL"
                                 required
                             />
@@ -111,12 +146,17 @@ const AddJob = () => {
 
                         {/* Job Description  */}
                         <div className="mb-2 lg:col-span-2">
-                            <span className="-mb-[14px] font-semibold text-gray-700 text-sm">
-                                Job Description
-                            </span>
-                            <EditorComponent
-                                className="lg:col-span-2"
-                                controllState={[editorText, setEditorText]}
+                            <Label htmlFor="jobDescription">
+                                Job Description (Markdown format)
+                            </Label>
+                            <Textarea
+                                id="jobDescription"
+                                name="jobDescription"
+                                placeholder="Write Job Description here."
+                                className="h-44"
+                                defaultValue={jobDescription}
+                                onChange={(e) => setJobDetails(e.target.value)}
+                                required
                             />
                         </div>
 
@@ -126,6 +166,7 @@ const AddJob = () => {
                             <TextInput
                                 id="jobIndustry"
                                 name="jobIndustry"
+                                value={jobIndustry}
                                 placeholder="Enter a job Industry i.e: Technogloy"
                                 required
                             />
@@ -138,6 +179,8 @@ const AddJob = () => {
                             </span>
                             <select
                                 name="jobType"
+                                defaultValue={job?.data?.jobType}
+                                onChange={(e) => setJobType(e.target.value)}
                                 className="p-[10px] border border-gray-400 border-opacity-70 rounded-md w-full"
                             >
                                 <option value="On Site">On Site</option>
@@ -157,6 +200,7 @@ const AddJob = () => {
                                     id="salaryMin"
                                     name="salaryMin"
                                     type="number"
+                                    value={salary?.min}
                                     placeholder="Enter Minimum Salary"
                                     required
                                 />
@@ -170,24 +214,33 @@ const AddJob = () => {
                                     id="salaryMax"
                                     name="salaryMax"
                                     type="number"
+                                    value={salary?.max}
                                     placeholder="Enter Maximum Salary"
                                     required
                                 />
                             </div>
                             <div className="flex-grow">
-                            <span className="-mb-[14px] font-semibold text-gray-700 text-sm">
-                                Frequency
-                            </span>
-                            <select
-                                name="salaryFreq"
-                                className="p-[10px] border border-gray-400 border-opacity-70 rounded-md w-full"
-                            >
-                                <option value="per Hour">Hourly</option>
-                                <option value="per Month">Monthly</option>
-                                <option value="per Quarter">Quarterly</option>
-                                <option value="per Twice a year">Twice a Year</option>
-                                <option value="per Annual">Annually</option>
-                            </select>
+                                <span className="-mb-[14px] font-semibold text-gray-700 text-sm">
+                                    Frequency
+                                </span>
+                                <select
+                                    name="salaryFreq"
+                                    defaultValue={salary?.frequency}
+                                    onChange={(e) =>
+                                        setSalaryFreq(e.target.value)
+                                    }
+                                    className="p-[10px] border border-gray-400 border-opacity-70 rounded-md w-full"
+                                >
+                                    <option value="per Hour">Hourly</option>
+                                    <option value="per Month">Monthly</option>
+                                    <option value="per Quarter">
+                                        Quarterly
+                                    </option>
+                                    <option value="per Twice a year">
+                                        Twice a Year
+                                    </option>
+                                    <option value="per Annual">Annually</option>
+                                </select>
                             </div>
                         </div>
                         {/* Deadline  */}
@@ -207,7 +260,7 @@ const AddJob = () => {
                         <div className="my-2 flex justify-center lg:col-span-2">
                             <input
                                 type="submit"
-                                value="Add to Job List"
+                                value="Update This Job"
                                 className="bg-customPrimary text-white px-4 py-[10px] rounded-md active:scale-[0.95] active:border-customPrimary border-3 active:border-opacity-70"
                             />
                         </div>
@@ -218,4 +271,4 @@ const AddJob = () => {
     );
 };
 
-export default AddJob;
+export default UpdateJob;

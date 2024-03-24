@@ -60,7 +60,6 @@ const AuthProvider = ({ children }) => {
                     uid: user.uid
                 }
                 axiosInstance.post('/jwt', jwtUser)
-                .then(res=> console.log(res.data))
             }
             // if user not found
             else{
