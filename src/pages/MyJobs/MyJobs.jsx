@@ -23,9 +23,17 @@ const MyJobs = () => {
             <ContainerLayout>
                 <div className="bg-gray-100 p-4 mt-4 rounded-md pt-12">
                     <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-2">
-                        {data.map((job) => {
-                            return <JobCard job={job} key={job._id} />;
-                        })}
+                        {data.length > 0 ? (
+                            data.map((job) => {
+                                return <JobCard job={job} key={job._id} />;
+                            })
+                        ) : (
+                            <div className="h-36 flex items-center justify-center col-span-full">
+                                <span className="text-3xl font-semibold text-gray-500 font-openSans">
+                                    No Job Found
+                                </span>
+                            </div>
+                        )}
                     </div>
                 </div>
             </ContainerLayout>

@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import bgTitle from "../../assets/bgTitle.jpg";
+import { Helmet } from "react-helmet-async";
 
 const PageTitle = ({ title }) => {
     return (
@@ -8,9 +9,12 @@ const PageTitle = ({ title }) => {
             style={{
                 backgroundImage: `url(${bgTitle})`,
                 backgroundRepeat: "no-repeat",
-                backgroundPosition: 'center'
+                backgroundPosition: "center",
             }}
         >
+            <Helmet>
+                <title>{"Job Spring - " + title}</title>
+            </Helmet>
             <div className="absolute inset-0 bg-indigo-500 opacity-60 rounded-b-[35%]"></div>
             <div className="relative h-full flex items-center justify-center rounded-b-[35%]">
                 <h2 className="text-2xl md:text-4xl font-bold text-white mt-8 font-openSans backdrop-blur-md backdrop-brightness-110 rounded-lg p-2">

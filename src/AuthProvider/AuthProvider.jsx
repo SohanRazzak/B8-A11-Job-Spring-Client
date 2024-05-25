@@ -23,26 +23,22 @@ const AuthProvider = ({ children }) => {
 
     // Sign Up with email and password
     const createUser = (email, password) => {
-        setIsLoading(true);
         return createUserWithEmailAndPassword(auth, email, password);
     };
 
     // Sign up-in with google
     const googleProvider = new GoogleAuthProvider();
     const googleLogin = () => {
-        setIsLoading(true);
         return signInWithPopup(auth, googleProvider);
     };
 
     // Login Existing User
     const logInUser = (email, password) => {
-        setIsLoading(true);
         return signInWithEmailAndPassword(auth, email, password);
     };
 
     // Logout User
     const logOutUser = () => {
-        setIsLoading(true);
         return signOut(auth);
     };
 

@@ -39,10 +39,25 @@ const SignIn = () => {
                         "success"
                     );
                 }
+                else {
+                    Swal.fire(
+                        "Sign In Error!",
+                        "Invalid Credentials, Please Check Again",
+                        "error"
+                    );
+                }
                 form.reset();
                 location.state ? navigate(location.state) : navigate("/");
             }
-        });
+        })
+        .catch(err => {
+            Swal.fire(
+                "Sign In Error!",
+                "Invalid Credentials, Please Check Again",
+                "error"
+            );
+            console.log(err.code);
+        })
     };
 
     // Handle Google Login

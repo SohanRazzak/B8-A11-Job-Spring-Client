@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect } from "react";
+import useAuth from '../useAuth/useAuth';
 
 
 // Creating axois instance
@@ -9,6 +10,8 @@ const axiosSecure = axios.create({
 })
 
 const useInterceptor = () => {
+    const {logOutUser} = useAuth();
+    
 
     useEffect(()=>{
         axiosSecure.interceptors.response.use((res)=>{
@@ -16,10 +19,10 @@ const useInterceptor = () => {
         },
         (error)=>{
             if(error.response.status == 401 || error.response.status == 403){
-                console.log("Logout Hobe");
+                logOutUser
             }
         })
-    },[])
+    },[logOutUser])
     return axiosSecure;
 };
 

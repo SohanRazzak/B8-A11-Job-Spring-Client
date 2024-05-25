@@ -14,11 +14,11 @@ const JobShowcase = () => {
     
     return (
         <ContainerLayout>
-            <div className="bg-gray-100 p-4 mt-4 rounded-md pt-10">
+            <div className="bg-gray-100 p-4 mt-4 rounded-md">
                 {/* Tabs  */}
                 <div>
                     <Tabs>
-                        <TabList className="flex gap-2 items-center mt-4">
+                        <TabList className="flex gap-2 items-center">
                             <Tab
                                 onClick={() => {
                                     setQueryKey(["All Jobs"]);
