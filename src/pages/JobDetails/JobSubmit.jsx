@@ -7,9 +7,8 @@ import Swal from "sweetalert2";
 Modal.setAppElement("#root");
 
 const ModalComponent = ({ info }) => {
-    const { totalApplicant, user, _id, refetch, isDisabled } = info;
+    const { totalApplicant, user, _id, refetch, isDisabled, setIsDisabled } = info;
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [disabled, setDisabled] = useState(isDisabled)
     const axiosSecure = useInterceptor();
 
     const openModal = () => setModalIsOpen(true);
@@ -22,6 +21,7 @@ const ModalComponent = ({ info }) => {
             cvLink: form.get("cvLink"),
             mobile: form.get("mobile"),
             email: form.get("email"),
+            uid: user?.uid,
             jobId: _id,
         };
         axiosSecure
@@ -33,16 +33,10 @@ const ModalComponent = ({ info }) => {
                         "This Job Is Added To Your Application List!",
                         "success"
                     );
-
-                    axiosSecure
-                        .patch(`/update-my-job/${_id}`, {
-                            email: user?.email,
-                            totalApplicant: totalApplicant + 1,
-                        })
-                        .then((res) => console.log(res.data));
-                        refetch();
+                    axiosSecure.patch(`update-job-applicants/${_id}`, {totalApplicant: totalApplicant+1})
+                    setIsDisabled(true);
                     e.target.reset();
-                    setDisabled(true)
+                    refetch();
                     closeModal();
                 }
             })
@@ -55,7 +49,7 @@ const ModalComponent = ({ info }) => {
     return (
         <div id="root">
             <Button
-                disabled={disabled}
+                disabled={isDisabled}
                 onClick={openModal}
                 size="sm"
                 type="primary"
@@ -96,7 +90,7 @@ const ModalComponent = ({ info }) => {
                         <div className="md:w-full px-3 mb-5">
                             <label
                                 className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                                htmlFor="grid-state"
+                                htmlFor="grid-city"
                             >
                                 CV / Portfolio Link
                             </label>
@@ -132,13 +126,13 @@ const ModalComponent = ({ info }) => {
                         <div className="md:w-1/2 px-3 mb-5 md:mb-0">
                             <label
                                 className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                                htmlFor="grid-city"
+                                htmlFor="grid-city-2"
                             >
                                 Email Address
                             </label>
                             <input
                                 className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4"
-                                id="grid-city"
+                                id="grid-city-2"
                                 type="text"
                                 name="email"
                                 defaultValue={user?.email}
@@ -149,15 +143,12 @@ const ModalComponent = ({ info }) => {
                     <div className="flex gap-6 mt-8">
                         <input
                             type="submit"
-                            value="Sign Up"
+                            value="Apply Now"
                             className="bg-customPrimary text-white px-4 py-3 font-medium rounded-md active:scale-[0.95] active:border-customPrimary border-3 active:border-opacity-70"
                         />
                         <Button onClick={closeModal}>Close</Button>
                     </div>
                 </form>
-
-                {/* <h2>Hello</h2>
-                <button>Close</button> */}
             </Modal>
         </div>
     );

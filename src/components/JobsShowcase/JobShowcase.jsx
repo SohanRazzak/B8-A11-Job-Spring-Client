@@ -18,7 +18,7 @@ const JobShowcase = () => {
                 {/* Tabs  */}
                 <div>
                     <Tabs>
-                        <TabList className="flex gap-2 items-center">
+                        <TabList className="flex gap-2 items-center flex-wrap">
                             <Tab
                                 onClick={() => {
                                     setQueryKey(["All Jobs"]);

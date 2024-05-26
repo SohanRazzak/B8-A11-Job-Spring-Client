@@ -43,6 +43,8 @@ const AddJob = () => {
             .then(res => {
                 if(res.data.insertedId){
                     Swal.fire('Success!', 'This Job Is Added To Job List Successfully!', 'success')
+                    form.reset();
+                    setEditorText(null)
                 }
             })
         } catch (error) {

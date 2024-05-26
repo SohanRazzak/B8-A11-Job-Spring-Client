@@ -72,7 +72,7 @@ const SignIn = () => {
                     email: res.user.email,
                     uid: res.user.uid
                 };
-                axios.put("http://localhost:5000/users", user).then((res) => {
+                axios.put("http://localhost:5000", user).then((res) => {
                     if (res.data.insertedId) {
                         Swal.fire(
                             "Sign Up Successful!",

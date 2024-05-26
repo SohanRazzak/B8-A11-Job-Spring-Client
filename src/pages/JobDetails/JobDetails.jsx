@@ -18,11 +18,13 @@ import {
 import JobSubmit from "./JobSubmit";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosInstance from "../../hooks/useAxiosInstance/useAxiosInstance";
+import { Helmet } from "react-helmet-async";
 
 const JobDetails = () => {
     const { _id } = useParams();
     const job = useJobFinder(["job,", _id], `/job-details/${_id}`);
     const [jobDetails, setJobDetails] = useState("");
+    const [isDisabled, setIsDisabled] = useState(false);
     const { user } = useAuth();
     const axiosInstance = useAxiosInstance();
 
@@ -40,7 +42,8 @@ const JobDetails = () => {
     useEffect(() => {
         scrollTo(0, 0);
         setJobDetails(data?.jobDescription);
-    }, [data?.jobDescription]);
+        setIsDisabled(applicantLoader.data?.some(sd=> sd.email == user.email) || data?.publisher === user.email || Date.now() > Date.parse(data?.deadline))
+    }, [data?.jobDescription, applicantLoader?.data, data?.publisher, data?.deadline, user.email]);
 
     if (isLoading || data == undefined) {
         return (
@@ -70,19 +73,22 @@ const JobDetails = () => {
         });
     };
 
-    const isDisabled = applicantLoader.data?.some(sd=> sd.email == user.email) || publisher === user.email || Date.now() > Date.parse(deadline);
+    
     return (
         <div id="jobdetails" className="bg-gray-100 pb-8">
+            <Helmet>
+                <title>Job Spring - {jobTitle}</title>
+            </Helmet>
             {/* heading banner */}
             <figure className="relative border-b-gray-500 border-b-4">
                 <img
                     src={companyThumb}
                     alt=""
-                    className="h-96 w-full object-cover"
+                    className="h-56 md:h-96 w-full object-cover"
                 />
                 <div className="w-full absolute bottom-0 bg-lime-500 bg-opacity-25 py-5">
                     <ContainerLayout>
-                        <span className="text-3xl md:text-4xl font-openSans font-bold text-white px-3 bg-customPrimary bg-opacity-75 rounded-lg ml-3">
+                        <span className="text-xl md:text-3xl font-openSans font-bold text-white px-3 bg-customPrimary bg-opacity-75 rounded-lg ml-3">
                             {jobTitle}
                         </span>
                     </ContainerLayout>
@@ -99,8 +105,7 @@ const JobDetails = () => {
                         </p>
                         <p className="flex gap-2 items-center">
                             <TbZoomMoney />
-                            Salary: {salary.min}-{salary.max} dollar
-                            {salary.frequency}
+                            Salary: {salary.min + " - " + salary.max + "$ " + salary.frequency}
                         </p>
                         <p className="flex gap-2 items-center">
                             <TbTag />
@@ -125,7 +130,7 @@ const JobDetails = () => {
                                 : totalApplicant + " person"}
                         </p>
                         <JobSubmit
-                            info={{publisher, totalApplicant, user, _id, refetch, isDisabled}}
+                            info={{publisher, totalApplicant, user, _id, refetch, isDisabled, setIsDisabled}}
                         ></JobSubmit>
                         {
                             isDisabled && <p className="!text-red-500 text-sm m-2">* You can not apply for the job you published, past deadline or already applied!</p>

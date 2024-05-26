@@ -88,7 +88,7 @@ const Footer = () => {
             <hr className="my-2" />
                 {/* Copyright Text  */}
                 <div className="sm:flex sm:items-center sm:justify-center bg-gray-200 py-3 w-full">
-                    <span className="text-sm text-gray-700">
+                    <span className="text-sm text-gray-700 mx-5">
                         © 2024{" "}
                         <Link
                             to="/"

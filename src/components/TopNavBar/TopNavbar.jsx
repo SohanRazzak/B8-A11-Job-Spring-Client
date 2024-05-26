@@ -34,12 +34,14 @@ export const TopNavbar = () => {
                 <Navbar.Container className="flex items-center justify-between">
                     <Navbar.Container className="flex items-center">
                         <Navbar.Brand>
+                            <Link to='/'>
                             <img
                                 src="https://i.ibb.co/pzDmzxs/job-spring.png"
                                 alt="keep"
                                 width="140"
                                 height="60"
                             />
+                            </Link>
                         </Navbar.Brand>
                         <Navbar.Divider></Navbar.Divider>
                         {/* NavLinks  */}

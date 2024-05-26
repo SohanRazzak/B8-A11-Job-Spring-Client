@@ -5,7 +5,7 @@ import ContainerLayout from "../../layouts/ContainerLayout/ContainerLayout";
 const AllJobs = () => {
     return (
         <div>
-            <PageTitle title="Find Jobs" />
+            <PageTitle title="See Available Jobs" />
             <ContainerLayout>
                 <div className="h-12 bg-gray-100 -mb-5"></div>
             </ContainerLayout>

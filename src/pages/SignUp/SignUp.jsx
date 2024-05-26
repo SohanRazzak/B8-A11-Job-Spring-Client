@@ -56,7 +56,7 @@ const SignUp = () => {
                     email,
                     uid,
                 };
-                axios.post("http://localhost:5000/users", user).then((res) => {
+                axios.post("", user).then((res) => {
                     if (res.data.insertedId) {
                         Swal.fire(
                             "Sign Up Successful!",
@@ -84,7 +84,7 @@ const SignUp = () => {
                     email: res.user.email,
                     uid: res.user.uid
                 };
-                axios.put("http://localhost:5000/users", user).then((res) => {
+                axios.put("http://localhost:5000", user).then((res) => {
                     if (res.data.insertedId) {
                         Swal.fire(
                             "Sign Up Successful!",

@@ -5,7 +5,7 @@ const HomePageJobs = () => {
     return (
         <div>
             <ContainerLayout>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl text-center text-lime-600 font-semibold">All New Jobs!</h2>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl text-center text-lime-600 font-semibold mt-4">All New Jobs!</h2>
             <JobShowcase/>
             </ContainerLayout>
         </div>
