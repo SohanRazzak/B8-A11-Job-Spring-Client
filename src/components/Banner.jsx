@@ -1,11 +1,16 @@
 import ContainerLayout from "../layouts/ContainerLayout/ContainerLayout";
 import banner from '../../public/banner.svg';
 import { TextInput } from "keep-react";
+import { useNavigate } from "react-router-dom";
 
 
 const Banner = () => {
+    const navigate = useNavigate();
     const handleSearch = (e)=>{
         e.preventDefault();
+        const searchTerm = e.target.search.value;
+        navigate(`/search/${searchTerm}`)
+        
     }
     return (
         <div className="bg-customPrimary bg-opacity-80 font-openSans">
@@ -18,7 +23,7 @@ const Banner = () => {
                         </div>
                         <form onSubmit={handleSearch} className="flex justify-center items-center w-full mt-8">
                         <TextInput
-                                name="photo"
+                                name="search"
                                 placeholder="Enter your keyword..."
                                 color="gray"
                                 sizing="md"

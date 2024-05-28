@@ -1,9 +1,10 @@
-import { Spinner } from "keep-react";
+import { Button, Spinner } from "keep-react";
 import JobCard from "../../components/JobCard/JobCard";
 import PageTitle from "../../components/PageTitle/PageTitle";
 import useAuth from "../../hooks/useAuth/useAuth";
 import useJobFinder from "../../hooks/useJobFinder/useJobFinder";
 import ContainerLayout from "../../layouts/ContainerLayout/ContainerLayout";
+import { Link } from "react-router-dom";
 
 const MyJobs = () => {
     const { user } = useAuth();
@@ -28,10 +29,16 @@ const MyJobs = () => {
                                 return <JobCard job={job} key={job._id} />;
                             })
                         ) : (
-                            <div className="h-36 flex items-center justify-center col-span-full">
+                            <div className="h-44 flex flex-col gap-5 items-center justify-center col-span-full">
                                 <span className="text-3xl font-semibold text-gray-500 font-openSans">
                                     No Job Found
                                 </span>
+                                <Link to='/'><Button
+                                size="sm"
+                                type="primary"
+                                color="success"
+                                className="mt-3"
+                                >Go Back</Button></Link>
                             </div>
                         )}
                     </div>

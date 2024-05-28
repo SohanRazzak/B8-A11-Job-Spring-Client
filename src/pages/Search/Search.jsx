@@ -1,16 +1,18 @@
 import { Button, Spinner } from "keep-react";
-import PageTitle from "../../components/PageTitle/PageTitle";
-import useAuth from "../../hooks/useAuth/useAuth";
+import { Link, useParams } from "react-router-dom";
 import useJobFinder from "../../hooks/useJobFinder/useJobFinder";
 import ContainerLayout from "../../layouts/ContainerLayout/ContainerLayout";
 import JobCard from "../../components/JobCard/JobCard";
-import { Link } from "react-router-dom";
+import PageTitle from "../../components/PageTitle/PageTitle";
 
-const AppliedJobs = () => {
-    const { user } = useAuth();
-    const uid = user?.uid;
-    const myJobs = useJobFinder(["Applied Jobs", uid], `/get-applications/${uid}`);
-    const { data, isLoading } = myJobs;
+const Search = () => {
+    const { searchTerm } = useParams();
+
+    const searchMatched = useJobFinder(
+        ["Search Matched"],
+        `/search/?title=${searchTerm}`
+    );
+    const { data, isLoading } = searchMatched;
     if (isLoading || data == undefined) {
         return (
             <div className="h-[400px] grid place-items-center">
@@ -18,12 +20,18 @@ const AppliedJobs = () => {
             </div>
         );
     }
-    console.log(myJobs)
+
+    console.log(searchMatched);
+
     return (
         <div>
-            <PageTitle title="Applied Jobs" />
+            <PageTitle title="Search Result" />
+
             <ContainerLayout>
-            <div className="bg-gray-100 p-4 mt-4 rounded-md pt-12">
+                <div className="h-12 bg-gray-100 pt-14 -mb-6">
+                    <span className="text-xl font-openSans font-semibold text-gray-700 px-5">Showing Search Result For: {searchTerm}</span>
+                </div>
+                <div className="bg-gray-100 p-4 mt-4 rounded-md pt-12">
                     <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-2">
                         {data.length > 0 ? (
                             data.map((job) => {
@@ -49,4 +57,4 @@ const AppliedJobs = () => {
     );
 };
 
-export default AppliedJobs;
+export default Search;
