@@ -13,6 +13,10 @@ import AppliedJobs from "./pages/AppliedJobs/AppliedJobs";
 import JobDetails from "./pages/JobDetails/JobDetails";
 import UpdateJob from "./pages/UpdateJob/UpdateJob";
 import Search from "./pages/Search/Search";
+import Blogs from "./pages/Blogs/Blogs";
+import Privacy from "./pages/Privacy/Privacy";
+import Terms from "./pages/Terms/Terms";
+import BlogPost from "./pages/BlogPost/BlogPost";
 
 const routers = createBrowserRouter([
     {
@@ -66,13 +70,20 @@ const routers = createBrowserRouter([
             },
             {
                 path: "/blogs",
-                element: <PrivateRoute><MyJobs/></PrivateRoute>
+                element: <Blogs/>
             },
             {
-                path: "/terms_condition"
+                path: "/blog/:id",
+                loader : ({params})=> fetch(`http://localhost:5000/get-blog-post/${params.id}`),
+                element: <BlogPost/>
             },
             {
-                path: "/privacy_policy"
+                path: "/terms_condition",
+                element: <Terms/>
+            },
+            {
+                path: "/privacy_policy",
+                element: <Privacy/>
             }
         ]
     }

@@ -1,5 +1,5 @@
-import ContainerLayout from "../layouts/ContainerLayout/ContainerLayout";
-import banner from '../../public/banner.svg';
+import ContainerLayout from "../../layouts/ContainerLayout/ContainerLayout";
+import banner from '../../../public/banner.svg';
 import { TextInput } from "keep-react";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +16,7 @@ const Banner = () => {
         <div className="bg-customPrimary bg-opacity-80 font-openSans">
             <ContainerLayout>
                 <div className="flex flex-col-reverse md:flex-row md:gap-5 justify-center items-center">
-                    <div className="text-white md:w-1/2 px-5 pt-4 pb-10 grid place-items-center">
+                    <div className="text-white md:w-1/2 px-5 pt-4 py-16 grid place-items-center">
                         <div className="space-y-4">
                         <h2 className="text-3xl lg:text-5xl font-bold ">Job Spring</h2>
                         <p className="text-xl font-medium">Where Your Job Search Blossoms</p>

@@ -1,15 +1,44 @@
 import { Button } from "keep-react";
 import { PropTypes } from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import useInterceptor from "../../hooks/useInterceptor/useInterceptor";
 import Swal from "sweetalert2";
+import emailjs from "emailjs-com";
 Modal.setAppElement("#root");
 
+const sendEmail = (data) => {
+    emailjs
+        .send("service_pk6zk0l", "template_vt7vspq", data, "PDZR5aCe_1GdyzUwo")
+        .then(
+            (result) => {
+                console.log(result.text);
+            },
+            (error) => {
+                console.log(error.text);
+            }
+        );
+};
+
 const ModalComponent = ({ info }) => {
-    const { totalApplicant, user, _id, refetch, isDisabled, setIsDisabled } = info;
+    const {
+        applicantLoader,
+        totalApplicant,
+        publisher,
+        jobTitle,
+        company,
+        deadline,
+        user,
+        _id,
+        refetch
+    } = info;
+    const [isDisabled, setIsDisabled] = useState(null)
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const axiosSecure = useInterceptor();
+    
+    useEffect(()=>{
+        setIsDisabled(applicantLoader.data?.some(sd=> sd.email == user.email) || publisher === user.email || Date.now() > Date.parse(deadline))
+    },[deadline, publisher, applicantLoader.data, user.email])
 
     const openModal = () => setModalIsOpen(true);
     const closeModal = () => setModalIsOpen(false);
@@ -33,8 +62,19 @@ const ModalComponent = ({ info }) => {
                         "This Job Is Added To Your Application List!",
                         "success"
                     );
-                    axiosSecure.patch(`update-job-applicants/${_id}`, {totalApplicant: totalApplicant+1})
+                    axiosSecure.patch(`update-job-applicants/${_id}`, {
+                        totalApplicant: totalApplicant + 1,
+                    });
                     setIsDisabled(true);
+
+                    // Sending mail using email js
+                    const emailText = {
+                        applicant_name: form.get("fullName"),
+                        company_name: company,
+                        job_title: jobTitle,
+                    };
+                    sendEmail(emailText);
+
                     e.target.reset();
                     refetch();
                     closeModal();
@@ -59,6 +99,9 @@ const ModalComponent = ({ info }) => {
             >
                 Apply Now
             </Button>
+            {
+                            isDisabled && <p className="!text-red-500 text-sm m-2">* You can not apply for the job you published, past deadline or already applied!</p>
+                        }
             <Modal
                 className="max-w-2xl mx-auto bg-white md:shadow-[rgba(0,0,10,0.2)_0px_0px_5px_2px] rounded px-8 pt-6 pb-8 flex flex-col my-5"
                 isOpen={modalIsOpen}

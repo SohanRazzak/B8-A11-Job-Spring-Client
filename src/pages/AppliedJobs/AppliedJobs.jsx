@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 const AppliedJobs = () => {
     const { user } = useAuth();
     const uid = user?.uid;
-    const myJobs = useJobFinder(["Applied Jobs", uid], `/get-applications/${uid}`);
+    const myJobs = useJobFinder(["Applied Jobs", uid], `/get-applied-jobs/${uid}`);
     const { data, isLoading } = myJobs;
     if (isLoading || data == undefined) {
         return (
@@ -18,7 +18,6 @@ const AppliedJobs = () => {
             </div>
         );
     }
-    console.log(myJobs)
     return (
         <div>
             <PageTitle title="Applied Jobs" />

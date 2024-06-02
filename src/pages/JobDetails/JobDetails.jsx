@@ -24,7 +24,6 @@ const JobDetails = () => {
     const { _id } = useParams();
     const job = useJobFinder(["job,", _id], `/job-details/${_id}`);
     const [jobDetails, setJobDetails] = useState("");
-    const [isDisabled, setIsDisabled] = useState(false);
     const { user } = useAuth();
     const axiosInstance = useAxiosInstance();
 
@@ -32,7 +31,7 @@ const JobDetails = () => {
     const applicantLoader = useQuery({
         queryKey: ["applications", _id],
         queryFn: async () => {
-            const result = await axiosInstance.get(`/get-applications/${_id}`);
+            const result = await axiosInstance.get(`/get-applications/${user?.uid}`);
             return result.data;
         },
     });
@@ -42,8 +41,8 @@ const JobDetails = () => {
     useEffect(() => {
         scrollTo(0, 0);
         setJobDetails(data?.jobDescription);
-        setIsDisabled(applicantLoader.data?.some(sd=> sd.email == user.email) || data?.publisher === user.email || Date.now() > Date.parse(data?.deadline))
-    }, [data?.jobDescription, applicantLoader?.data, data?.publisher, data?.deadline, user.email]);
+        
+    }, [data?.jobDescription]);
 
     if (isLoading || data == undefined) {
         return (
@@ -130,11 +129,8 @@ const JobDetails = () => {
                                 : totalApplicant + " person"}
                         </p>
                         <JobSubmit
-                            info={{publisher, totalApplicant, user, _id, refetch, isDisabled, setIsDisabled}}
+                            info={{applicantLoader, deadline, publisher, totalApplicant, jobTitle, company, user, _id, refetch}}
                         ></JobSubmit>
-                        {
-                            isDisabled && <p className="!text-red-500 text-sm m-2">* You can not apply for the job you published, past deadline or already applied!</p>
-                        }
                     </div>
                 </div>
             </ContainerLayout>
