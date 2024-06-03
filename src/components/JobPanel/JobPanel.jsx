@@ -11,6 +11,7 @@ const JobPanel = ({data}) => {
             </div>
         );
     }
+    console.log(data);
     return (
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-2">
                             {data.length < 1 ? (
@@ -26,7 +27,7 @@ const JobPanel = ({data}) => {
                                 >Go Back</Button></Link>
                             </div>
                         ) : (
-                                    data.map((job) => {
+                                    data?.map((job) => {
                                         return (
                                             <JobCard job={job} key={job._id} />
                                         );
@@ -37,7 +38,7 @@ const JobPanel = ({data}) => {
 };
 
 JobPanel.propTypes = {
-    data: PropTypes.object
+    data: PropTypes.array
 };
 
 export default JobPanel;

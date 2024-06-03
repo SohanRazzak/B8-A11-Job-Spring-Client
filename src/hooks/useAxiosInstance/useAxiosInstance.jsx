@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Axios instance
 const axiosInstance = axios.create({
-    baseURL: "https://job-spring.web.app",
+    baseURL: "https://technocare-server.onrender.com",
     withCredentials: true,
 })
 
