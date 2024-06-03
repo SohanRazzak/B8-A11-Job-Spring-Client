@@ -5,7 +5,7 @@ import useAuth from '../useAuth/useAuth';
 
 // Creating axois instance
 const axiosSecure = axios.create({
-    baseURL: "https://technocare-server.onrender.com",
+    baseURL: "https://b8-a11-job-spring-server.onrender.com",
     withCredentials: true
 })
 
