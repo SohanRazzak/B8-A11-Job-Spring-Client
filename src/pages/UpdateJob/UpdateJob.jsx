@@ -69,7 +69,6 @@ const UpdateJob = () => {
             totalApplicant: totalApplicant,
         };
         
-        console.log(updatedJob);
         
         // Updating to server
         axiosInstance.patch(`/update-my-job/${_id}`, updatedJob)

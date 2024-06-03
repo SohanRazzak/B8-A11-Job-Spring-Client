@@ -21,7 +21,6 @@ const Search = () => {
         );
     }
 
-    console.log(searchMatched);
 
     return (
         <div>

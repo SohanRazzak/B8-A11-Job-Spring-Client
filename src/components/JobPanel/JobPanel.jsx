@@ -11,7 +11,6 @@ const JobPanel = ({data}) => {
             </div>
         );
     }
-    console.log(data);
     return (
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-2">
                             {data.length < 1 ? (

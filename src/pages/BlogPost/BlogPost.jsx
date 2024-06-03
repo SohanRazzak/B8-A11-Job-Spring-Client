@@ -5,7 +5,6 @@ import { Helmet } from "react-helmet-async";
 
 const BlogPost = () => {
     const post = useLoaderData();
-    console.log(post);
     return (
         <div className="max-w-5xl bg-gray-50 mx-auto p-5 rounded-b-md">
             <Helmet>

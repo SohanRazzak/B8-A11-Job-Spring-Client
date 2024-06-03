@@ -48,7 +48,7 @@ const AddJob = () => {
                 }
             })
         } catch (error) {
-            console.log(error);
+            https://b8-a11-job-spring-server.onrender.com(error);
         }
     };
     return (

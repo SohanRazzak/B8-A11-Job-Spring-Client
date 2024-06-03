@@ -26,7 +26,7 @@ const JobShowcase = () => {
             .get(`/get-jobs-count/?category=${currentCategory}`)
             .then((data) => {
                 setJobCount(data.data.jobCount);
-                setTotalPages(Math.ceil(jobCount / 5));
+                setTotalPages(Math.ceil(jobCount / 10));
                 setQueryURL(`/get-all-jobs/?category=${currentCategory}&page=${currentPage}`)
             });
             axiosInstance.get(queryURL)
@@ -35,7 +35,6 @@ const JobShowcase = () => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-    console.log(currentPage);
 
     return (
         <ContainerLayout>
