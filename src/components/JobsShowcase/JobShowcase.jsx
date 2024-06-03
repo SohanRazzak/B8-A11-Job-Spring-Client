@@ -5,13 +5,38 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import "../JobsShowcase/JobShowCase.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import JobPanel from "../JobPanel/JobPanel";
+import Pagination from "../Pagination/Pagination";
+import useAxiosInstance from "../../hooks/useAxiosInstance/useAxiosInstance";
 
 const JobShowcase = () => {
+    const axiosInstance = useAxiosInstance();
+    const [totalPages, setTotalPages] = useState(0);
+    const [jobCount, setJobCount] = useState(0);
+    const [currentCategory, setCurrentCategory] = useState("");
+    const [currentPage, setCurrentPage] = useState(0);
     const [queryKey, setQueryKey] = useState(["All Jobs"]);
-    const [queryURL, setQueryURL] = useState("/get-all-jobs");
-    
+    const [data, setData] = useState(null)
+    const [queryURL, setQueryURL] = useState(
+        `/get-all-jobs/?page=${currentPage}`
+    );
+    useEffect(() => {
+        axiosInstance
+            .get(`/get-jobs-count/?category=${currentCategory}`)
+            .then((data) => {
+                setJobCount(data.data.jobCount);
+                setTotalPages(Math.ceil(jobCount / 5));
+                setQueryURL(`/get-all-jobs/?category=${currentCategory}&page=${currentPage}`)
+            });
+            axiosInstance.get(queryURL)
+            .then((data)=> setData(data.data))
+    }, [axiosInstance, jobCount, currentCategory, currentPage, queryKey, queryURL]);
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+    console.log(currentPage);
+
     return (
         <ContainerLayout>
             <div className="bg-gray-100 p-4 mt-4 rounded-md">
@@ -22,7 +47,8 @@ const JobShowcase = () => {
                             <Tab
                                 onClick={() => {
                                     setQueryKey(["All Jobs"]);
-                                    setQueryURL("/get-all-jobs");
+                                    setCurrentPage(0);
+                                    setCurrentCategory("");
                                 }}
                             >
                                 All Jobs
@@ -30,9 +56,8 @@ const JobShowcase = () => {
                             <Tab
                                 onClick={() => {
                                     setQueryKey(["On Site"]);
-                                    setQueryURL(
-                                        "/get-all-jobs/?category=On Site"
-                                    );
+                                    setCurrentPage(0);
+                                    setCurrentCategory("On Site");
                                 }}
                             >
                                 On Site
@@ -40,9 +65,8 @@ const JobShowcase = () => {
                             <Tab
                                 onClick={() => {
                                     setQueryKey(["Remote"]);
-                                    setQueryURL(
-                                        "/get-all-jobs/?category=Remote"
-                                    );
+                                    setCurrentPage(0);
+                                    setCurrentCategory("Remote");
                                 }}
                             >
                                 Remote
@@ -50,9 +74,8 @@ const JobShowcase = () => {
                             <Tab
                                 onClick={() => {
                                     setQueryKey(["Hybrid"]);
-                                    setQueryURL(
-                                        "/get-all-jobs/?category=Hybrid"
-                                    );
+                                    setCurrentPage(0);
+                                    setCurrentCategory("Hybrid");
                                 }}
                             >
                                 Hybrid
@@ -60,31 +83,39 @@ const JobShowcase = () => {
                             <Tab
                                 onClick={() => {
                                     setQueryKey(["Part-Time"]);
-                                    setQueryURL(
-                                        "/get-all-jobs/?category=Part-Time"
-                                    );
+                                    setCurrentPage(0);
+                                    setCurrentCategory("Part-Time");
                                 }}
                             >
                                 Part-Time
                             </Tab>
                         </TabList>
                         <TabPanel>
-                            <JobPanel queryKey={queryKey} queryURL={queryURL}/>
+                            <JobPanel data={data} />
                         </TabPanel>
                         <TabPanel>
-                            <JobPanel queryKey={queryKey} queryURL={queryURL}/>
+                            <JobPanel data={data} />
                         </TabPanel>
                         <TabPanel>
-                            <JobPanel queryKey={queryKey} queryURL={queryURL}/>
+                            <JobPanel data={data} />
                         </TabPanel>
                         <TabPanel>
-                            <JobPanel queryKey={queryKey} queryURL={queryURL}/>
+                            <JobPanel data={data} />
                         </TabPanel>
                         <TabPanel>
-                            <JobPanel queryKey={queryKey} queryURL={queryURL}/>
+                            <JobPanel data={data} />
                         </TabPanel>
                     </Tabs>
                 </div>
+                {jobCount ? (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
+                ) : (
+                    ""
+                )}
             </div>
         </ContainerLayout>
     );

@@ -53,3 +53,8 @@ Job Spring is a job portal web application where users can create an account, pu
 - **React Router**: For navigation and routing.
 - **React Tabs**: For organizing job listings in the "All Jobs" page.
 - **Lottie Animations**: For adding animations to various routes to enhance the user experience.
+
+## Additional Features
+
+- **Pagination**: Show Pagination for every category when the Job Data is more than 10.
+

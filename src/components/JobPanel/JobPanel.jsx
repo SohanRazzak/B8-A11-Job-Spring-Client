@@ -1,13 +1,10 @@
 import PropTypes from 'prop-types';
 import JobCard from '../JobCard/JobCard';
-import useJobFinder from '../../hooks/useJobFinder/useJobFinder';
 import { Button, Spinner } from 'keep-react';
 import { Link } from 'react-router-dom';
 
-const JobPanel = ({queryKey, queryURL}) => {
-    const query = useJobFinder(queryKey, queryURL);
-    const { data, isLoading } = query;
-    if (isLoading || data == undefined) {
+const JobPanel = ({data}) => {
+    if (!data) {
         return (
             <div className="h-[360px] grid place-items-center">
                 <Spinner color="info" size="xl" />
@@ -40,8 +37,7 @@ const JobPanel = ({queryKey, queryURL}) => {
 };
 
 JobPanel.propTypes = {
-    queryKey: PropTypes.array,
-    queryURL: PropTypes.string
+    data: PropTypes.object
 };
 
 export default JobPanel;
