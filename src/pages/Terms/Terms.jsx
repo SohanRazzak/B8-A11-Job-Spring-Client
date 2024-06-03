@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import ContainerLayout from "../../layouts/ContainerLayout/ContainerLayout";
+import { Helmet } from "react-helmet-async";
 
 const Terms = () => {
     useEffect(() => {
@@ -8,6 +9,11 @@ const Terms = () => {
     }, []);
     return (
         <ContainerLayout>
+            <Helmet>
+                <title>
+                    Job Spring - Terms and Conditions
+                </title>
+            </Helmet>
             <div className="bg-gray-100 p-5 md:p-8 rounded-b-md">
                 <h1 className="text-2xl font-semibold text-gray-700 font-openSans mb-2">
                     Terms and Conditions

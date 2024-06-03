@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { updateProfile } from "firebase/auth";
+import { Helmet } from "react-helmet-async";
 
 const SignUp = () => {
     const [showPass, setShowPass] = useState(false);
@@ -99,6 +100,11 @@ const SignUp = () => {
     }
     return (
         <div className="max-w-6xl mx-auto my-5 py-8 rounded-md bg-gray-50 flex flex-col md:flex-row justify-center items-center gap-5">
+            <Helmet>
+                <title>
+                    Job Spring - Sign Up
+                </title>
+            </Helmet>
             {/* Sign Up Section */}
             <div className="md:w-1/2 flex justify-center">
                 <Card className="overflow-hidden rounded-md p-6 xl:w-2/3">
