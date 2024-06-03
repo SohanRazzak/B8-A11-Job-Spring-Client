@@ -72,7 +72,7 @@ const SignIn = () => {
                     email: res.user.email,
                     uid: res.user.uid
                 };
-                axios.put("http://localhost:5000", user).then((res) => {
+                axios.put("https://job-spring.web.app", user).then((res) => {
                     if (res.data.insertedId) {
                         Swal.fire(
                             "Sign Up Successful!",

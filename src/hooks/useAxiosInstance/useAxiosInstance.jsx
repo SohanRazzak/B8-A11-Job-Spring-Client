@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Axios instance
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:5000",
+    baseURL: "https://job-spring.web.app",
     withCredentials: true,
 })
 
