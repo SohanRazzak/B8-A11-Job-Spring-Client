@@ -16,22 +16,18 @@ const JobShowcase = () => {
     const [jobCount, setJobCount] = useState(0);
     const [currentCategory, setCurrentCategory] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
-    const [queryKey, setQueryKey] = useState(["All Jobs"]);
-    const [data, setData] = useState(null)
-    const [queryURL, setQueryURL] = useState(
-        `/get-all-jobs/?page=${currentPage}`
-    );
+    const [jobs, setJobs] = useState(null);
+    const [isLoading, setIsLoading] = useState(true)
     useEffect(() => {
+        axiosInstance.get(`/get-all-jobs/?category=${currentCategory}&page=${currentPage}`)
+        .then(data=> {setJobs(data.data); setIsLoading(false)})
         axiosInstance
             .get(`/get-jobs-count/?category=${currentCategory}`)
             .then((data) => {
                 setJobCount(data.data.jobCount);
                 setTotalPages(Math.ceil(jobCount / 10));
-                setQueryURL(`/get-all-jobs/?category=${currentCategory}&page=${currentPage}`)
             });
-            axiosInstance.get(queryURL)
-            .then((data)=> setData(data.data))
-    }, [axiosInstance, jobCount, currentCategory, currentPage, queryKey, queryURL]);
+    }, [axiosInstance, jobCount, currentCategory, currentPage]);
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
@@ -45,64 +41,65 @@ const JobShowcase = () => {
                         <TabList className="flex gap-2 items-center flex-wrap">
                             <Tab
                                 onClick={() => {
-                                    setQueryKey(["All Jobs"]);
                                     setCurrentPage(0);
                                     setCurrentCategory("");
+                                    setIsLoading(true)
+                                    
                                 }}
                             >
                                 All Jobs
                             </Tab>
                             <Tab
                                 onClick={() => {
-                                    setQueryKey(["On Site"]);
                                     setCurrentPage(0);
                                     setCurrentCategory("On Site");
+                                    setIsLoading(true)
                                 }}
                             >
                                 On Site
                             </Tab>
                             <Tab
                                 onClick={() => {
-                                    setQueryKey(["Remote"]);
                                     setCurrentPage(0);
                                     setCurrentCategory("Remote");
+                                    setIsLoading(true)
                                 }}
                             >
                                 Remote
                             </Tab>
                             <Tab
                                 onClick={() => {
-                                    setQueryKey(["Hybrid"]);
                                     setCurrentPage(0);
                                     setCurrentCategory("Hybrid");
+                                    setIsLoading(true)
                                 }}
                             >
                                 Hybrid
                             </Tab>
                             <Tab
                                 onClick={() => {
-                                    setQueryKey(["Part-Time"]);
                                     setCurrentPage(0);
                                     setCurrentCategory("Part-Time");
+                                    setIsLoading(true)
                                 }}
                             >
                                 Part-Time
                             </Tab>
                         </TabList>
                         <TabPanel>
-                            <JobPanel data={data} />
+                            <JobPanel jobs={jobs} isLoading={isLoading}/>
                         </TabPanel>
                         <TabPanel>
-                            <JobPanel data={data} />
+                            <JobPanel jobs={jobs} isLoading={isLoading}/>
                         </TabPanel>
                         <TabPanel>
-                            <JobPanel data={data} />
+                            <JobPanel jobs={jobs} isLoading={isLoading}/>
                         </TabPanel>
                         <TabPanel>
-                            <JobPanel data={data} />
+                            <JobPanel jobs={jobs} isLoading={isLoading}/>
                         </TabPanel>
                         <TabPanel>
-                            <JobPanel data={data} />
+                            <JobPanel jobs={jobs} isLoading={isLoading}/>
                         </TabPanel>
                     </Tabs>
                 </div>

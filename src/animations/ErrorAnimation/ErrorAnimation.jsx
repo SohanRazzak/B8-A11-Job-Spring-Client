@@ -5,7 +5,7 @@ import { Button } from "keep-react";
 const ErrorAnimation = () => {
     return (
         <div className="flex justify-center flex-col">
-            <div className="w-2/3 mx-auto">
+            <div className="w-full md:w-2/3 mx-auto">
             <Lottie
                 loop={false}
                 animationData={errorAnimation}
