@@ -21,7 +21,7 @@ const Testimonials = () => {
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-center text-lime-600 font-semibold mt-6">
                 Whats People Say?
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 p-4 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 p-4 gap-5">
                 {data?.slice(0, 4).map((tmony) => (
                     <Card
                         key={tmony._id}
