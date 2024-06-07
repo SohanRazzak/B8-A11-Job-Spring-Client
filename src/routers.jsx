@@ -69,7 +69,7 @@ const routers = createBrowserRouter([
             },
             {
                 path: "/blog/:id",
-                loader : ({params})=> fetch(`http://localhost:5000//get-blog-post/${params.id}`),
+                loader : ({params})=> fetch(`https://b8-a11-job-spring-server.onrender.com/get-blog-post/${params.id}`),
                 element: <BlogPost/>
             },
             {
