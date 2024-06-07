@@ -9,7 +9,12 @@ Modal.setAppElement("#root");
 
 const sendEmail = (data) => {
     emailjs
-        .send("service_pk6zk0l", "template_vt7vspq", data, "PDZR5aCe_1GdyzUwo")
+        .send(
+            import.meta.env.VITE_EMAIL_KEY,
+            import.meta.env.VITE_EMAIL_TEMPLATE,
+            data,
+            import.meta.env.VITE_EMAIL_API
+        )
         .then(
             (result) => {
                 console.log(result.text);
@@ -30,15 +35,19 @@ const ModalComponent = ({ info }) => {
         deadline,
         user,
         _id,
-        refetch
+        refetch,
     } = info;
-    const [isDisabled, setIsDisabled] = useState(null)
+    const [isDisabled, setIsDisabled] = useState(null);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const axiosSecure = useInterceptor();
-    
-    useEffect(()=>{
-        setIsDisabled(applicantLoader.data?.some(sd=> sd.email == user.email) || publisher === user.email || Date.now() > Date.parse(deadline))
-    },[deadline, publisher, applicantLoader.data, user.email])
+
+    useEffect(() => {
+        setIsDisabled(
+            applicantLoader.data?.some((sd) => sd.email == user.email) ||
+                publisher === user.email ||
+                Date.now() > Date.parse(deadline)
+        );
+    }, [deadline, publisher, applicantLoader.data, user.email]);
 
     const openModal = () => setModalIsOpen(true);
     const closeModal = () => setModalIsOpen(false);
@@ -99,9 +108,12 @@ const ModalComponent = ({ info }) => {
             >
                 Apply Now
             </Button>
-            {
-                            isDisabled && <p className="!text-red-500 text-sm m-2">* You can not apply for the job you published, past deadline or already applied!</p>
-                        }
+            {isDisabled && (
+                <p className="!text-red-500 text-sm m-2">
+                    * You can not apply for the job you published, past deadline
+                    or already applied!
+                </p>
+            )}
             <Modal
                 className="max-w-2xl mx-auto bg-white md:shadow-[rgba(0,0,10,0.2)_0px_0px_5px_2px] rounded px-8 pt-6 pb-8 flex flex-col my-5"
                 isOpen={modalIsOpen}
