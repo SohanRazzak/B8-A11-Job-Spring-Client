@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "job-spring"
-  }
+    "default": "job-spring-2",
+    "final": "job-spring-2"
+  },
+  "targets": {},
+  "etags": {}
 }
