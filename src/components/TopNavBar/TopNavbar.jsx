@@ -3,9 +3,15 @@ import { Link, NavLink } from "react-router-dom";
 import "./TopNavBar.css";
 import useAuth from "../../hooks/useAuth/useAuth";
 import ContainerLayout from "../../layouts/ContainerLayout/ContainerLayout";
+import { useEffect, useState } from "react";
 
 export const TopNavbar = () => {
     const { isLoggedIn, logOutUser, user } = useAuth();
+    const [photoURL, setPhotoURL] = useState('https://i.ibb.co/D9tmthh/6769264-60111.jpg')
+
+    useEffect(()=>{
+        setPhotoURL(user?.photoURL)
+    },[user])
 
     // NavLinks
     const navLinks = (
@@ -75,7 +81,7 @@ export const TopNavbar = () => {
                                     <Avatar
                                         shape="circle"
                                         size="md"
-                                        img={user?.photoURL}
+                                        img={photoURL}
                                         className="border border-gray-400 cursor-pointer"
                                     />
                                 </Tooltip>
