@@ -73,7 +73,7 @@ const SignIn = () => {
                     email: res.user.email,
                     uid: res.user.uid
                 };
-                axios.put("https://job-spiring-server.vercel.app", user).then((res) => {
+                axios.put("https://job-spiring-server.vercel.app/users", user).then((res) => {
                     if (res.data.insertedId) {
                         Swal.fire(
                             "Sign Up Successful!",
